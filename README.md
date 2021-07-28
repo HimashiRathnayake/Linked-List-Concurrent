@@ -1,2 +1,2 @@
 # LinkedListConcurrent
-Implement Linked List in C with Concurrent Programming
+Implement Linked List with C programming languages with Concurrent Programming
