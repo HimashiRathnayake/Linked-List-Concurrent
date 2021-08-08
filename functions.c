@@ -20,8 +20,7 @@ int * getRandom() {
     return random_array;
 } /* get a random array */
 
-void shuffle(char array[][7], size_t size)
-{
+void shuffle(char array[][7], size_t size){
   if (size > 1) {
     size_t i;
     for (i = 0; i < size - 1; i++) {
