@@ -1,8 +1,9 @@
-# LinkedListConcurrent
+<h1>Linked Lists with Concurrent Programming</h1>
 
-Implement Linked List in C with Concurrent Programming
+* Programming Language used: C
+* API used for multi-threading: Pthreads
 
-## Serial linked list implementation
+### 1. Serial linked list implementation
 
 Compile: 
 
@@ -12,7 +13,7 @@ Run:
 
 ``.\linked_list_serial``
 
-## Mutex based linked list implementation
+### 2. Mutex based linked list implementation
 
 Compile: 
 
@@ -22,7 +23,7 @@ Run:
 
 ``.\linked_list_mutex <Thread Count>``
 
-## Read-write lock based linked list implementation
+### 3. Read-write lock based linked list implementation
 
 Compile: 
 
