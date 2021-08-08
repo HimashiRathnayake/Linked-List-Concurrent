@@ -32,4 +32,4 @@ int main(int argc, char* argv[]) {
     free(thread_handles);
     
     return 0;
-}
+} /* simple concurrent program */
