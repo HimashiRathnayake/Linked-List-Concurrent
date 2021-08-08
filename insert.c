@@ -26,4 +26,4 @@ int Insert(int value, struct list_node_s** head_pp)
         return 0;
     }
 
-} /* Insert */
+} /* Inserting a new node into a list */
