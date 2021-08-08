@@ -4,12 +4,13 @@
 #include <string.h>
 #include "list_node_s.h"
 #include "functions.h"
+#include <pthread.h>
 
 #define MAX 65535
 #define MIN 0
 #define n 1000
 #define m 10000
-#define sample_size 100
+#define sample_size 500
 
 float m_member_count;
 float m_insert_count;
@@ -18,6 +19,38 @@ int members;
 int inserts;
 int deletes;
 char operations_list[m][7];
+int thread_count;
+pthread_rwlock_t rwlock;
+struct list_node_s *pointer;
+long thread;
+pthread_t* thread_handles;
+
+void* ThreadFunction(void* rank){
+    long my_rank = (long) rank;
+
+    int local_gap = m / thread_count;
+    int local_start = local_gap * my_rank;
+    int local_end = local_start + local_gap;
+
+    for(int loop = local_start; loop < local_end; loop++) {
+        int var = rand() % (MAX + 1 - MIN) + MIN;
+
+        if(strcmp(operations_list[loop], "Member") == 0){
+            pthread_rwlock_rdlock(&rwlock);
+            Member(var, pointer);
+            pthread_rwlock_unlock(&rwlock);
+        } else if(strcmp(operations_list[loop], "Insert") == 0){
+            pthread_rwlock_wrlock(&rwlock);
+            Insert(var, &pointer);
+            pthread_rwlock_unlock(&rwlock);
+        } else if(strcmp(operations_list[loop], "Delete") == 0){
+            pthread_rwlock_wrlock(&rwlock);
+            Delete(var, &pointer);
+            pthread_rwlock_unlock(&rwlock);
+        }
+    }
+    return NULL;
+}
 
 float time_per_sample(){
 
@@ -52,17 +85,15 @@ float time_per_sample(){
 
     clock_t begin = clock();
 
-    for(int loop = 0; loop < m; loop++) {
-        int var = rand() % (MAX + 1 - MIN) + MIN;
+    pthread_rwlock_init(&rwlock, NULL);
 
-        if(strcmp(operations_list[loop], "Member") == 0){
-            Member(var, pointer);
-        } else if(strcmp(operations_list[loop], "Insert") == 0){
-            Insert(var, &pointer);
-        } else if(strcmp(operations_list[loop], "Delete") == 0){
-            Delete(var, &pointer);
-        }
-    }
+    for (thread = 0; thread < thread_count; thread++)
+        pthread_create(&thread_handles[thread], NULL, ThreadFunction, (void*) thread);
+
+    for (thread = 0; thread < thread_count; thread++)
+        pthread_join(thread_handles[thread], NULL);
+
+    pthread_rwlock_destroy(&rwlock);
 
     clock_t end = clock();
     float time_taken = ((float)(end-begin)) / CLOCKS_PER_SEC;
@@ -73,7 +104,11 @@ float time_per_sample(){
 int main(int argc, char* argv[]) {
 
     float time_array[sample_size];
-    
+
+    thread_count = strtol(argv[1], NULL, 10);
+
+    thread_handles = malloc (thread_count*sizeof(pthread_t));
+
     printf( "Enter member, insert, delete count : ");
     scanf("%f %f %f", &m_member_count, &m_insert_count, &m_delete_count);
 
@@ -93,6 +128,8 @@ int main(int argc, char* argv[]) {
     float std = get_std(time_array, sample_size, mean);
 
     printf("\n%lf %1f\n", mean, std);
+
+    free(thread_handles);
 
     return 0;
 

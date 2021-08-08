@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
         pthread_create(&thread_handles[thread], NULL, Hello, (void*) thread);
 
     printf("Hello from the main thread\n");
+    printf("%d", strcmp("Member", "Member"));
 
     for (thread = 0; thread < thread_count; thread++)
         pthread_join(thread_handles[thread], NULL);
