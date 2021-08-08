@@ -33,7 +33,7 @@ void shuffle(char array[][7], size_t size)
       strcpy(array[i], t);
     }
   }
-}
+} /* shuffle an array */
 
 float get_mean(float array[], int size){
     float sum = 0.0;
@@ -41,7 +41,7 @@ float get_mean(float array[], int size){
       sum += array[i];
     }
     return sum/size;
-}
+} /* get mean of an array */
 
 float get_std(float array[], int size, float mean){
     float sum = 0.0;
@@ -49,4 +49,4 @@ float get_std(float array[], int size, float mean){
       sum += (array[i] - mean) * (array[i] - mean);
     }
     return sqrt(sum/size);
-}
+} /* get std of an array */
