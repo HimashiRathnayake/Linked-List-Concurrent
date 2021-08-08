@@ -23,4 +23,4 @@ int Delete(int value, struct list_node_s** head_pp) {
     } else {
         return 0;
     }
-} /* Delete */
+} /* Deleting a node from a linked list */
