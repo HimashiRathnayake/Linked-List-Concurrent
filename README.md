@@ -1,6 +1,5 @@
 <h1>Linked Lists with Concurrent Programming</h1>
 
-* Programming Language used: C
 * API used for multi-threading: Pthreads
 
 ### 1. Serial linked list implementation
